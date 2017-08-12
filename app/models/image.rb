@@ -12,15 +12,23 @@ class Image < ActiveRecord::Base
 
   acts_as_mappable
 
-  scope :within_range, ->(origin, limit=nil) {
-    scope = by_distance(origin: origin, reverse: false) 
-    scope = scope.within(limit,origin: origin) if limit 
+  scope :exclude_images, ->(id) {
+    where('images.id not in (?)', id)
+  }
+  scope :location_exists, -> {
+    where('images.lng is not null and images.lat is not null')
+  }
+  scope :within_range, ->(origin, limit=nil, reverse=false) {
+    scope=location_exists
+    scope=scope.within(limit,:origin=>origin)                   if limit
+    scope=scope.by_distance(:origin=>origin, :reverse=>reverse) unless reverse.nil?
     return scope
   }
-  
-  scope :include_ids, ->(ids){
-    where(id: ids) if ids.present?
-  }
+
+  def self.with_distance(origin, scope)
+    scope.select("*, -1.0 as distance")
+         .each {|i| i.distance = i.distance_from(origin) }
+  end
  
   def Image.last_modified
     Image.maximum(:updated_at)

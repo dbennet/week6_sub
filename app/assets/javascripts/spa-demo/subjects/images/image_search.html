@@ -1,0 +1,83 @@
+<div class="image-search-form-heading">
+  <h5>Set image search parameters (hint: type something like JHU address: 3101 Wyman Park Dr., Baltimore, MD)</h5>
+  <form class="image-search-form form-group">
+    <form name="set_origin"
+      class="navbar-form"      
+      ng-hide="$ctrl.getOriginAddress()">
+      <input name="address-search"
+             type="text" 
+             placeholder="Address Search"
+             ng-model="$ctrl.address"
+             ng-required="true">
+      <button title="lookup-address"
+              class="btn btn-default"
+              ng-disabled="select_origin.$invalid || $ctrl.location"
+              ng-click="$ctrl.lookupAddress()">Lookup</button>
+      <button title="change-origin"
+                class="btn btn-default"
+                ng-show="$ctrl.location"
+                ng-click="$ctrl.clearOrigin()">Change</button>
+      <label>Set Range (in miles):</label>
+      <input type="number"
+           name="distance-limit"
+           min="0"
+           step="1"
+           ng-model="$ctrl.distanceLimit"
+           ng-change="$ctrl.changeDistance()">
+      <label>Order Results:</label>
+      <select
+           class="form-control"
+           style="display:inline;width:200px;"
+           name="order"
+           ng-model="$ctrl.newOrder"
+           ng-change="$ctrl.changeOrder()">
+        <option value="asc" ng-selected="true">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </form>
+
+    <span class="search-criteria"
+        ng-show="$ctrl.location">
+      <span>Origin: </span>
+      <span class="current-origin">{{$ctrl.location.formatted_address}}</span>
+    </span>  
+    <button title="search-images"
+                type="submit" 
+                class="btn btn-default"
+                ng-disabled="$ctrl.location == null"
+                ng-click="$ctrl.searchImages()">Search for Images</button>
+  </form>
+</div>
+<div class="image-list"
+      ng-show="$ctrl.items != null && $ctrl.location">
+      <h5>Search Results</h5>
+  <table class="table table-striped">
+    <tr>
+      <th>#</th>
+      <th></th>
+      <th>Caption</th>
+      <th>Distance from Origin</th>
+      <th>Action</th>
+    </tr>
+    <tr ng-repeat="item in $ctrl.items">
+      <td><span>{{item.id}}</span></td>
+      <td><img style="width: 50px; height: 33px" 
+                 ng-src="{{item.content_url}}?width=50"/></td>
+      <td>
+        <a ui-sref="images({id:item.id})">                    
+            {{item.caption}}
+        </a>
+      </td>
+      <td>
+        <span>{{item.distance}}</span>
+      </td>
+      <td>
+        <span>
+          <button title="remove"
+                class="btn btn-danger"
+                ng-click="$ctrl.removeImage(item.id)">Remove Image</button>
+        </span>
+      </td>
+    </tr>
+  </table>
+</div>

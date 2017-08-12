@@ -29,6 +29,10 @@
       url: "/images/:id",
       templateUrl: APP_CONFIG.images_page_html
     })
+    .state(imageSearch,{
+      url: "/image-search",
+      templateUrl: APP_CONFIG.image_search_page_html
+    }) 
     .state("things",{
       url: "/things/:id",
       templateUrl: APP_CONFIG.things_page_html

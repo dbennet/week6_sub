@@ -1,9 +1,10 @@
 class ImagesController < ApplicationController
   before_action :set_image, only: [:show, :update, :destroy, :content]
-  wrap_parameters :image, include: ["caption", "position"]
+  wrap_parameters :image, include: ["caption", "position","order","excluded"]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
-  after_action :verify_authorized, except: [:content]
+  after_action :verify_authorized, except: [:content,:search]
   after_action :verify_policy_scoped, only: [:index]
+  before_action :origin, only: [:search]
 
   rescue_from EXIFR::MalformedJPEG, with: :contents_error
 
@@ -34,21 +35,26 @@ class ImagesController < ApplicationController
     end
   end
 
-  def locate
-    authorize Image, :search
-    point = Point.new(params[:lng].to_f, params[:lat].to_f)
-    miles = params[:miles] ? params[:miles].to_f : nil
-    ids = params[:include_ids]
-    last_modified = Image.last_modified
+
+  def search
+    expires_in 1.minute, :public=>true
+    miles=params[:miles] ? params[:miles].to_f : nil
+    excluded = params[:excluded] ? params[:excluded].split(",").map {|s| s.to_i } : nil
+    params[:order] && params[:order].downcase=="desc" ? reverse = true : reverse = false  
+    last_modified=Image.last_modified
     state="#{request.headers['QUERY_STRING']}:#{last_modified}"
+   
     eTag="#{Digest::MD5.hexdigest(state)}"
-    @images = Image.within_range(point, miles).include_ids(ids)
-    expires_in 1.minutes, :public=>true
-    if stale? etag: eTag
+    if stale?  :etag=>eTag
+      @images=Image.within_range(@origin, miles, reverse)
+      if excluded
+        @images = @images.exclude_images(excluded)
+      end
+      @images=Image.with_distance(@origin, @images)
       render "images/index"
     end
   end
-
+  
 
 
 
@@ -97,8 +103,22 @@ class ImagesController < ApplicationController
       @image = Image.find(params[:id])
     end
 
+    # def image_params
+    #   params.require(:image).permit(:caption,:position=>[:lng,:lat])
+    # end
+
     def image_params
-      params.require(:image).permit(:caption,:position=>[:lng,:lat])
+      params.require(:image).permit(:caption,:order,:excluded,:position=>[:lng,:lat])
+    end
+
+    def origin
+      case
+      when params[:lng] && params[:lat]
+        @origin=Point.new(params[:lng].to_f, params[:lat].to_f)
+      else
+        raise ActionController::ParameterMissing.new(
+          "an origin [lng/lat] required")
+      end
     end
 
     def image_content_params

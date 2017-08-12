@@ -15,7 +15,7 @@ class ImagePolicy < ApplicationPolicy
     organizer_or_admin?
   end
 
-  def locate
+  def search
    true
   end
 

@@ -12,9 +12,6 @@ Rails.application.routes.draw do
       post "thing_images",  controller: :thing_images, action: :create
       get "thing_images",  controller: :thing_images, action: :image_things
       get "linkable_things",  controller: :thing_images, action: :linkable_things
-      collection do
-        get 'locate'
-      end
     end
     resources :things, except: [:new, :edit] do
       resources :thing_images, only: [:index, :create, :update, :destroy]
@@ -23,11 +20,10 @@ Rails.application.routes.draw do
     get 'geocoder/addresses' => "geocoder#addresses"
     get 'geocoder/positions' => "geocoder#positions"
     get 'subjects' => "thing_images#subjects"
+    get 'search' => "images#search"
   end      
 
   get "/client-assets/:name.:format", :to => redirect("/client/client-assets/%{name}.%{format}")
-#  get "/", :to => redirect("/client/index.html")
-
   get '/ui'  => 'ui#index'
   get '/ui#' => 'ui#index'
   root "ui#index"
