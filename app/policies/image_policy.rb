@@ -15,6 +15,10 @@ class ImagePolicy < ApplicationPolicy
     organizer_or_admin?
   end
 
+  def locate
+   true
+  end
+
   def get_things?
     true
   end

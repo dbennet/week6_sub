@@ -34,6 +34,24 @@ class ImagesController < ApplicationController
     end
   end
 
+  def locate
+    authorize Image, :search
+    point = Point.new(params[:lng].to_f, params[:lat].to_f)
+    miles = params[:miles] ? params[:miles].to_f : nil
+    ids = params[:include_ids]
+    last_modified = Image.last_modified
+    state="#{request.headers['QUERY_STRING']}:#{last_modified}"
+    eTag="#{Digest::MD5.hexdigest(state)}"
+    @images = Image.within_range(point, miles).include_ids(ids)
+    expires_in 1.minutes, :public=>true
+    if stale? etag: eTag
+      render "images/index"
+    end
+  end
+
+
+
+
   def create
     authorize Image
     @image = Image.new(image_params)

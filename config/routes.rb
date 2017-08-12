@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       post "thing_images",  controller: :thing_images, action: :create
       get "thing_images",  controller: :thing_images, action: :image_things
       get "linkable_things",  controller: :thing_images, action: :linkable_things
+      collection do
+        get 'locate'
+      end
     end
     resources :things, except: [:new, :edit] do
       resources :thing_images, only: [:index, :create, :update, :destroy]
