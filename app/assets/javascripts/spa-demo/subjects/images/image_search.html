@@ -1,5 +1,5 @@
-<div class="image-search-form-heading">
-  <h5>Set image search parameters (hint: type something like JHU address: 3101 Wyman Park Dr., Baltimore, MD)</h5>
+<div class="image-controls">
+  <h5>Please enter your location</h5>
   <form class="image-search-form form-group">
     <form name="set_origin"
       class="navbar-form"      
@@ -17,7 +17,7 @@
                 class="btn btn-default"
                 ng-show="$ctrl.location"
                 ng-click="$ctrl.clearOrigin()">Change</button>
-      <label>Set Range (in miles):</label>
+      <label>Within distance (miles):</label>
       <input type="number"
            name="distance-limit"
            min="0"
@@ -36,7 +36,7 @@
       </select>
     </form>
 
-    <span class="search-criteria"
+    <span class="image-controls"
         ng-show="$ctrl.location">
       <span>Origin: </span>
       <span class="current-origin">{{$ctrl.location.formatted_address}}</span>
@@ -70,13 +70,6 @@
       </td>
       <td>
         <span>{{item.distance}}</span>
-      </td>
-      <td>
-        <span>
-          <button title="remove"
-                class="btn btn-danger"
-                ng-click="$ctrl.removeImage(item.id)">Remove Image</button>
-        </span>
       </td>
     </tr>
   </table>

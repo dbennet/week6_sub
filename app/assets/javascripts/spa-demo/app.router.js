@@ -29,7 +29,7 @@
       url: "/images/:id",
       templateUrl: APP_CONFIG.images_page_html
     })
-    .state(imageSearch,{
+    .state("imageSearch",{
       url: "/image-search",
       templateUrl: APP_CONFIG.image_search_page_html
     }) 
