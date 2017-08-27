@@ -1,0 +1,76 @@
+
+Without logging in
+
+On the navBar please go to Services
+
+You will seed a list of services
+
+The user should be able to click a service.
+
+the /business_services/:id page will display
+
+"Related Things:" A thing (business) will appear
+
+The user can click on the "thing". The #/things/ page will appear. However no information on this page.
+
+
+
+Log in as Mike (mike@bbunch.org, password0)
+
+On the navBar please go to Services
+
+You will seed a list of services
+
+The user should be able to click a service.
+
+the /business_services/:id page will display
+
+
+"Related Things:" A thing (business) will appear
+
+
+The user can Delete or Clear service.
+
+
+The user can click on the "thing". The #/things/ page will appear. 
+
+There is a list of "related Images:" on this page.
+
+
+
+#################
+
+https://gentle-escarpment-85786.herokuapp.com/ = Services
+https://hidden-savannah-45815.herokuapp.com/ =  penguims
+
+
+###############
+
+
+$ heroku git:remote -a falling-wind-1624
+Git remote heroku added.
+
+
+AIzaSyAk0R-4BZ7jkasU_Hf5Dmkr97a91IxoUYg 
+
+Log in as Alice (alice@bbunch.org, password2)
+
+
+n the navBar please go to Services
+
+You will seed a list of services
+
+The user should be able to click a service.
+
+the /business_services/:id page will display
+
+A list of "Related Things:" will appear
+
+Also a list of "Linkage Things:" will appear.
+
+WHen the user clicks on a "Linkable Thing" the "link to things" button will be enabled
+
+
+
+
+
